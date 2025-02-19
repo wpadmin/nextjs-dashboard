@@ -1,5 +1,6 @@
 'use client';
 import { updateInvoice } from '@/app/lib/actions';
+import { useActionState } from 'react';
 
 import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
 import {
@@ -18,10 +19,12 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  const initialState: State = { message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
+  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
 
   return (
-    <form action={updateInvoiceWithId}>
+    <form action={formAction}>
     {/* 
     Примечание: использование скрытого поля ввода в форме также работает (например, <input type="hidden" name="id" value={invoice.id} />).
     Однако значения будут отображаться как полный текст в исходном HTML-коде, что не идеально для конфиденциальных данных.  
